@@ -29,7 +29,6 @@ var ext = window.location.pathname.split('.').pop().toLowerCase(),
         //don't run if file extension doesn't match our preClass extensions
 	//or if the document doesn't have a single <pre> node
         if (!(ext in preClass) && (!elem || elem.nodeName != 'PRE')) {
-          opera.postError(': not a css or js file');
           return;
         };
   
