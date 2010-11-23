@@ -1,42 +1,56 @@
 // copyright 2010 Mike Taylor miket@opera.com
 // MIT/GPL licensed
 
-(function(window, doc){
-
-var ext = window.location.pathname.split('.').pop().toLowerCase(),
-    body = doc.body,
-    head =  doc.head || doc.getElementsByTagName('head')[0],
-    elem = body && doc.compatMode == 'BackCompat' && body.childNodes.length == 1 && body.firstChild,
-    css = doc.createElement('style'),
-    themes = {
-      'default': 'pre.sh_sourceCode{background-color:#fff;color:#000;font-weight:normal;font-style:normal;}pre.sh_sourceCode .sh_keyword{color:#0000b3;font-weight:normal;font-style:normal;}pre.sh_sourceCode .sh_type{color:#4c73a6;font-weight:normal;font-style:normal;}pre.sh_sourceCode .sh_string{color:#666;font-weight:normal;font-style:normal;}pre.sh_sourceCode .sh_regexp{color:#666;font-weight:normal;font-style:normal;}pre.sh_sourceCode .sh_specialchar{color:#666;font-weight:normal;font-style:normal;}pre.sh_sourceCode .sh_comment{color:#b30000;font-weight:normal;font-style:normal;}pre.sh_sourceCode .sh_number{color:#000;font-weight:normal;font-style:normal;}pre.sh_sourceCode .sh_preproc{color:#0000b3;font-weight:normal;font-style:normal;}pre.sh_sourceCode .sh_function{color:#000;font-weight:normal;font-style:normal;}pre.sh_sourceCode .sh_url{color:#666;font-weight:normal;font-style:normal;}pre.sh_sourceCode .sh_date{color:#0000b3;font-weight:normal;font-style:normal;}pre.sh_sourceCode .sh_time{color:#0000b3;font-weight:normal;font-style:normal;}pre.sh_sourceCode .sh_file{color:#0000b3;font-weight:normal;font-style:normal;}pre.sh_sourceCode .sh_ip{color:#666;font-weight:normal;font-style:normal;}pre.sh_sourceCode .sh_name{color:#666;font-weight:normal;font-style:normal;}pre.sh_sourceCode .sh_variable{color:#0000b3;font-weight:normal;font-style:normal;}pre.sh_sourceCode .sh_oldfile{color:#666;font-weight:normal;font-style:normal;}pre.sh_sourceCode .sh_newfile{color:#666;font-weight:normal;font-style:normal;}pre.sh_sourceCode .sh_difflines{color:#0000b3;font-weight:normal;font-style:normal;}pre.sh_sourceCode .sh_selector{color:#0000b3;font-weight:normal;font-style:normal;}pre.sh_sourceCode .sh_property{color:#0000b3;font-weight:normal;font-style:normal;}pre.sh_sourceCode .sh_value{color:#666;font-weight:normal;font-style:normal;}'
-    },
-    preClass = {
-      js: 'sh_javascript_dom',
-      css: 'sh_css'
-    },
-    self = {
-      addCSS: function(theme) {
-        //apply class to <pre> that wraps the code in the document
-        elem.className = preClass[ext];
-
-        //workaround for User CSS not working yet in alpha extensions
-        //eventually grab theme from localStorage, or use default
-        css.innerHTML = themes[theme] || themes['default'];
-	head.appendChild(css);
-      },
-      init: function() {
-        //don't run if file extension doesn't match our preClass extensions
-	//or if the document doesn't have a single <pre> node
-        if (!(ext in preClass) && (!elem || elem.nodeName != 'PRE')) {
-          return;
-        };
+var Hilighter = function(window, doc) {
   
-	//add the appropriate style file and apply shjs highlighting
-        self.addCSS();
-        sh_highlightDocument();	
-      }
-    };
+  var ext = window.location.pathname.split('.').pop().toLowerCase(),
+      body = doc.body,
+      head =  doc.head || doc.getElementsByTagName('head')[0],
+      elem = body && doc.compatMode == 'BackCompat' && body.childNodes.length == 1 && body.firstChild,
+      css = doc.createElement('style'),
+      themes = {
+        'default': 'pre.sh_sourceCode{background-color:#fff;color:#000;font-weight:normal;font-style:normal;}pre.sh_sourceCode .sh_keyword{color:#0000b3;font-weight:normal;font-style:normal;}pre.sh_sourceCode .sh_type{color:#4c73a6;font-weight:normal;font-style:normal;}pre.sh_sourceCode .sh_string{color:#666;font-weight:normal;font-style:normal;}pre.sh_sourceCode .sh_regexp{color:#666;font-weight:normal;font-style:normal;}pre.sh_sourceCode .sh_specialchar{color:#666;font-weight:normal;font-style:normal;}pre.sh_sourceCode .sh_comment{color:#b30000;font-weight:normal;font-style:normal;}pre.sh_sourceCode .sh_number{color:#000;font-weight:normal;font-style:normal;}pre.sh_sourceCode .sh_preproc{color:#0000b3;font-weight:normal;font-style:normal;}pre.sh_sourceCode .sh_function{color:#000;font-weight:normal;font-style:normal;}pre.sh_sourceCode .sh_url{color:#666;font-weight:normal;font-style:normal;}pre.sh_sourceCode .sh_date{color:#0000b3;font-weight:normal;font-style:normal;}pre.sh_sourceCode .sh_time{color:#0000b3;font-weight:normal;font-style:normal;}pre.sh_sourceCode .sh_file{color:#0000b3;font-weight:normal;font-style:normal;}pre.sh_sourceCode .sh_ip{color:#666;font-weight:normal;font-style:normal;}pre.sh_sourceCode .sh_name{color:#666;font-weight:normal;font-style:normal;}pre.sh_sourceCode .sh_variable{color:#0000b3;font-weight:normal;font-style:normal;}pre.sh_sourceCode .sh_oldfile{color:#666;font-weight:normal;font-style:normal;}pre.sh_sourceCode .sh_newfile{color:#666;font-weight:normal;font-style:normal;}pre.sh_sourceCode .sh_difflines{color:#0000b3;font-weight:normal;font-style:normal;}pre.sh_sourceCode .sh_selector{color:#0000b3;font-weight:normal;font-style:normal;}pre.sh_sourceCode .sh_property{color:#0000b3;font-weight:normal;font-style:normal;}pre.sh_sourceCode .sh_value{color:#666;font-weight:normal;font-style:normal;}',
+        'test': 'pre.sh_sourceCode{background-color:red;}'
+      },
+      preClass = {
+        js: 'sh_javascript_dom',
+        css: 'sh_css'
+      },
+      self = {
+        addCSS: function(theme) {
+          //apply class to <pre> that wraps the code in the document
+          elem.className = preClass[ext];
+
+          //workaround for User CSS not working yet in alpha extensions
+          //eventually grab theme from widget.preferences, or use default
+          css.innerHTML = themes[window.localStorage.theme] || themes['default'];
+          head.appendChild(css);
+        },
+        changeTheme: function(theme) {
+          css.innerHTML = themes[theme];
+          window.localStorage.theme = theme;
+        },
+	storeFileType: function() {
+	  //can't access widget from a bg script, it seems
+	  //might have to postMessage it in from the bg process
+          //widget.preferences.fileType = ext;
+	},
+        init: function() {
+          //don't run if file extension doesn't match our preClass extensions
+          //or if the document doesn't have a single <pre> node
+          if (!(ext in preClass) && (!elem || elem.nodeName != 'PRE')) {
+            return;
+          };
+
+          //add the appropriate style file and apply shjs highlighting
+	  self.storeFileType();
+          self.addCSS();
+          sh_highlightDocument();	
+        }
+      };
+      return self;
+};
+
     
   /* Copyright (C) 2007, 2008 gnombat@users.sourceforge.net */
   /* License: http://shjs.sourceforge.net/doc/gplv3.html */
@@ -46,7 +60,6 @@ var ext = window.location.pathname.split('.').pop().toLowerCase(),
   sh_languages.css=[[[/\/\/\//g,"sh_comment",1],[/\/\//g,"sh_comment",7],[/\/\*\*/g,"sh_comment",8],[/\/\*/g,"sh_comment",9],[/(?:\.|#)[A-Za-z0-9_]+/g,"sh_selector",-1],[/\{/g,"sh_cbracket",10,1],[/~|!|%|\^|\*|\(|\)|-|\+|=|\[|\]|\\|:|;|,|\.|\/|\?|&|<|>|\|/g,"sh_symbol",-1]],[[/$/g,null,-2],[/(?:<?)[A-Za-z0-9_\.\/\-_~]+@[A-Za-z0-9_\.\/\-_~]+(?:>?)|(?:<?)[A-Za-z0-9_]+:\/\/[A-Za-z0-9_\.\/\-_~]+(?:>?)/g,"sh_url",-1],[/<\?xml/g,"sh_preproc",2,1],[/<!DOCTYPE/g,"sh_preproc",4,1],[/<!--/g,"sh_comment",5],[/<(?:\/)?[A-Za-z](?:[A-Za-z0-9_:.-]*)(?:\/)?>/g,"sh_keyword",-1],[/<(?:\/)?[A-Za-z](?:[A-Za-z0-9_:.-]*)/g,"sh_keyword",6,1],[/&(?:[A-Za-z0-9]+);/g,"sh_preproc",-1],[/<(?:\/)?[A-Za-z][A-Za-z0-9]*(?:\/)?>/g,"sh_keyword",-1],[/<(?:\/)?[A-Za-z][A-Za-z0-9]*/g,"sh_keyword",6,1],[/@[A-Za-z]+/g,"sh_type",-1],[/(?:TODO|FIXME|BUG)(?:[:]?)/g,"sh_todo",-1]],[[/\?>/g,"sh_preproc",-2],[/([^=" \t>]+)([ \t]*)(=?)/g,["sh_type","sh_normal","sh_symbol"],-1],[/"/g,"sh_string",3]],[[/\\(?:\\|")/g,null,-1],[/"/g,"sh_string",-2]],[[/>/g,"sh_preproc",-2],[/([^=" \t>]+)([ \t]*)(=?)/g,["sh_type","sh_normal","sh_symbol"],-1],[/"/g,"sh_string",3]],[[/-->/g,"sh_comment",-2],[/<!--/g,"sh_comment",5]],[[/(?:\/)?>/g,"sh_keyword",-2],[/([^=" \t>]+)([ \t]*)(=?)/g,["sh_type","sh_normal","sh_symbol"],-1],[/"/g,"sh_string",3]],[[/$/g,null,-2]],[[/\*\//g,"sh_comment",-2],[/(?:<?)[A-Za-z0-9_\.\/\-_~]+@[A-Za-z0-9_\.\/\-_~]+(?:>?)|(?:<?)[A-Za-z0-9_]+:\/\/[A-Za-z0-9_\.\/\-_~]+(?:>?)/g,"sh_url",-1],[/<\?xml/g,"sh_preproc",2,1],[/<!DOCTYPE/g,"sh_preproc",4,1],[/<!--/g,"sh_comment",5],[/<(?:\/)?[A-Za-z](?:[A-Za-z0-9_:.-]*)(?:\/)?>/g,"sh_keyword",-1],[/<(?:\/)?[A-Za-z](?:[A-Za-z0-9_:.-]*)/g,"sh_keyword",6,1],[/&(?:[A-Za-z0-9]+);/g,"sh_preproc",-1],[/<(?:\/)?[A-Za-z][A-Za-z0-9]*(?:\/)?>/g,"sh_keyword",-1],[/<(?:\/)?[A-Za-z][A-Za-z0-9]*/g,"sh_keyword",6,1],[/@[A-Za-z]+/g,"sh_type",-1],[/(?:TODO|FIXME|BUG)(?:[:]?)/g,"sh_todo",-1]],[[/\*\//g,"sh_comment",-2],[/(?:<?)[A-Za-z0-9_\.\/\-_~]+@[A-Za-z0-9_\.\/\-_~]+(?:>?)|(?:<?)[A-Za-z0-9_]+:\/\/[A-Za-z0-9_\.\/\-_~]+(?:>?)/g,"sh_url",-1],[/(?:TODO|FIXME|BUG)(?:[:]?)/g,"sh_todo",-1]],[[/\}/g,"sh_cbracket",-2],[/\/\/\//g,"sh_comment",1],[/\/\//g,"sh_comment",7],[/\/\*\*/g,"sh_comment",8],[/\/\*/g,"sh_comment",9],[/[A-Za-z0-9_-]+[ \t]*:/g,"sh_property",-1],[/[.%A-Za-z0-9_-]+/g,"sh_value",-1],[/#(?:[A-Za-z0-9_]+)/g,"sh_string",-1]]];
 
    window.addEventListener('DOMContentLoaded', function() {
-    self.init();
+    var hl = new Hilighter(window, document);
+    hl.init();
   }, false);
-
-})(window, document);

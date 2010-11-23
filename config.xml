@@ -4,4 +4,5 @@
   <description>Adds SHJS highlighting of .js and .css source files</description>
   <author email="miket@opera.com">Mike Taylor</author>
   <license href="http://shjs.sourceforge.net/doc/gplv3.html">GPLv3</license>
+  <preference name="fileType" value="js" /> 
 </widget>
