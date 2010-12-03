@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<widget xmlns="http://www.w3.org/ns/widgets" version="0.1">
+<widget xmlns="http://www.w3.org/ns/widgets" version="0.2">
   <name>JSCSS Highlighter</name>
   <description>Adds SHJS highlighting of .js and .css source files</description>
   <author email="miket@opera.com">Mike Taylor</author>
