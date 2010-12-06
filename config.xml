@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<widget xmlns="http://www.w3.org/ns/widgets" version="0.2">
+<widget xmlns="http://www.w3.org/ns/widgets" version="0.3">
   <name>JSCSS Highlighter</name>
-  <description>Adds SHJS highlighting of .js and .css source files</description>
-  <author email="miket@opera.com">Mike Taylor</author>
+  <description>Adds SHJS highlighting for .js and .css source files</description>
+  <author email="miket@opera.com" href="http://www.miketaylr.com">Mike Taylor</author>
   <license href="http://shjs.sourceforge.net/doc/gplv3.html">GPLv3</license>
+  <icon src="icon.png" />
   <preference name="theme" value="default" /> 
 </widget>
