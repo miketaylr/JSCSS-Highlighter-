@@ -101,9 +101,5 @@ opera.extension.addEventListener( 'message', function( event ) {
   var theme = event.data.theme,
   _hl = new Hilighter( theme, window, document );
   _hl.init();
-  
-  if ( event.data.change ) {
-    _hl.changeTheme( theme )
-  }
 }, false);
 

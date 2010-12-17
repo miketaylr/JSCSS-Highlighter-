@@ -137,6 +137,5 @@ addCSS( currentTheme );
 themePicker.addEventListener( 'change', function() {
   //store the new theme in widget preferences
   widget.preferences.theme = this.value;
-  //tell the injected script about our new theme, but i think i need a MessageChannel()
   css.innerHTML = themes[ widget.preferences.theme ];
 }, false );
