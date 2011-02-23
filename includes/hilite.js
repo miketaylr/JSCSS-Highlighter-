@@ -5,7 +5,7 @@ var Hilighter = function(theme, window, doc) {
   
   var ext = window.location.pathname.split('.').pop().toLowerCase(),
       body = doc.body,
-      head =  doc.head || doc.getElementsByTagName('head')[0],
+      head =  doc.head,
       elem = body && doc.compatMode == 'BackCompat' && body.childNodes.length == 1 && body.firstChild,
       opts = window.location.scheme == 'widget:' && window.location.pathname.indexOf('options.html') > -1,
       css = doc.createElement('style'),
@@ -78,9 +78,11 @@ var Hilighter = function(theme, window, doc) {
         init: function() {
           //don't run if file extension doesn't match our preClass extensions
           //or if the document doesn't have a single <pre> node
-          /*if ((!(ext in preClass) && !elem) || opts) {
+          if ((!(ext in preClass) && !elem) || opts) {
             return;
-          };*/
+          };
+          
+          elem.style = "word-wrap: break-word";
 
           //add the appropriate style file and apply shjs highlighting
           self.addCSS( theme );
