@@ -82,7 +82,8 @@ var Hilighter = function(theme, window, doc) {
             return;
           };
           
-          elem.style = "word-wrap: break-word";
+          //emulate chrome's styles a little here
+          elem.style = "word-wrap:pre-wrap;font-family:'Courier New';font-size:13px";
 
           //add the appropriate style file and apply shjs highlighting
           self.addCSS( theme );
